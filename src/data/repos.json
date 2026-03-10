@@ -1,0 +1,186 @@
+{
+	"status": "success",
+	"message": "Fetched 30 repositories for user \"YvvonM\"",
+	"repositories": [
+		{
+			"id": 1,
+			"name": "-Refund_by_Location_Smart_Contract",
+			"url": "https://github.com/YvvonM/-Refund_by_Location_Smart_Contract",
+			"description": "This uses smart contract to pay token when a certain location is reached"
+		},
+		{
+			"id": 2,
+			"name": "assistant_rag",
+			"url": "https://github.com/YvvonM/assistant_rag",
+			"description": null
+		},
+		{
+			"id": 3,
+			"name": "awesome-generative-ai-guide",
+			"url": "https://github.com/YvvonM/awesome-generative-ai-guide",
+			"description": "A one stop repository for generative AI research updates, interview resources, notebooks and much more!"
+		},
+		{
+			"id": 4,
+			"name": "bcp_paul",
+			"url": "https://github.com/YvvonM/bcp_paul",
+			"description": null
+		},
+		{
+			"id": 5,
+			"name": "Book-Mathematical-Foundation-of-Reinforcement-Learning",
+			"url": "https://github.com/YvvonM/Book-Mathematical-Foundation-of-Reinforcement-Learning",
+			"description": "This is the homepage of a new book entitled \"Mathematical Foundations of Reinforcement Learning.\""
+		},
+		{
+			"id": 6,
+			"name": "Chimera_socials",
+			"url": "https://github.com/YvvonM/Chimera_socials",
+			"description": "This is for agents to build a social influencer spawning application"
+		},
+		{
+			"id": 7,
+			"name": "CIFAR_IMAGE_CLASSIFICATION",
+			"url": "https://github.com/YvvonM/CIFAR_IMAGE_CLASSIFICATION",
+			"description": "This project is about using tensorflow to do computer vision and classify images of the CIFAR dataset"
+		},
+		{
+			"id": 8,
+			"name": "cisco-starter-repo",
+			"url": "https://github.com/YvvonM/cisco-starter-repo",
+			"description": null
+		},
+		{
+			"id": 9,
+			"name": "contract_rag",
+			"url": "https://github.com/YvvonM/contract_rag",
+			"description": null
+		},
+		{
+			"id": 10,
+			"name": "customer_support_Agent",
+			"url": "https://github.com/YvvonM/customer_support_Agent",
+			"description": "An agent that offer customer support services"
+		},
+		{
+			"id": 11,
+			"name": "delivery_duration_prediction",
+			"url": "https://github.com/YvvonM/delivery_duration_prediction",
+			"description": "Tries to predict time a food carrier will take to deliver food to a customer"
+		},
+		{
+			"id": 12,
+			"name": "finance_ai_agent",
+			"url": "https://github.com/YvvonM/finance_ai_agent",
+			"description": "AI multi-agent that does financial analysis"
+		},
+		{
+			"id": 13,
+			"name": "fine_tuning_DeepSeek",
+			"url": "https://github.com/YvvonM/fine_tuning_DeepSeek",
+			"description": "finetunig_deepseek_using_LoRA"
+		},
+		{
+			"id": 14,
+			"name": "Health_Agent",
+			"url": "https://github.com/YvvonM/Health_Agent",
+			"description": "A multimodal health agent"
+		},
+		{
+			"id": 15,
+			"name": "House_price_prediction",
+			"url": "https://github.com/YvvonM/House_price_prediction",
+			"description": "Doing_Data_Analysis_And_Modelling_House_Price_Data"
+		},
+		{
+			"id": 16,
+			"name": "LLM-Fine-Tuning-RAG",
+			"url": "https://github.com/YvvonM/LLM-Fine-Tuning-RAG",
+			"description": null
+		},
+		{
+			"id": 17,
+			"name": "LuxDevHQ-Data-Science-Guide",
+			"url": "https://github.com/YvvonM/LuxDevHQ-Data-Science-Guide",
+			"description": "LuxDevHQ Data Science Course Guide"
+		},
+		{
+			"id": 18,
+			"name": "mexico_listings",
+			"url": "https://github.com/YvvonM/mexico_listings",
+			"description": "ml regression project"
+		},
+		{
+			"id": 19,
+			"name": "open_traffic_airflow_dbt_datapipeline",
+			"url": "https://github.com/YvvonM/open_traffic_airflow_dbt_datapipeline",
+			"description": "A data pipeline for doing ETL on traffic data"
+		},
+		{
+			"id": 20,
+			"name": "podcast_data_pipeline",
+			"url": "https://github.com/YvvonM/podcast_data_pipeline",
+			"description": "A data pipeline for uploading podcast data"
+		},
+		{
+			"id": 21,
+			"name": "portfolio_optimization",
+			"url": "https://github.com/YvvonM/portfolio_optimization",
+			"description": null
+		},
+		{
+			"id": 22,
+			"name": "python-sql-data-analysis",
+			"url": "https://github.com/YvvonM/python-sql-data-analysis",
+			"description": "Data cleaning with python and data analysis with sql"
+		},
+		{
+			"id": 23,
+			"name": "Rags_prompt_generation",
+			"url": "https://github.com/YvvonM/Rags_prompt_generation",
+			"description": "This repository contains a rag that can generate a good prompt from a users prompt"
+		},
+		{
+			"id": 24,
+			"name": "Redash-chatbot-add-on",
+			"url": "https://github.com/YvvonM/Redash-chatbot-add-on",
+			"description": "This is a redash dashboard that has a gpt add on"
+		},
+		{
+			"id": 25,
+			"name": "Research_Agent",
+			"url": "https://github.com/YvvonM/Research_Agent",
+			"description": "Does unofficial research for you. Returns a pdf file to start you off on your research"
+		},
+		{
+			"id": 26,
+			"name": "rob101",
+			"url": "https://github.com/YvvonM/rob101",
+			"description": "Pilot course for Robotics 101: Computational Linear Algebra"
+		},
+		{
+			"id": 27,
+			"name": "Sentiment-Analysis-on-Twitter-Airline-Data",
+			"url": "https://github.com/YvvonM/Sentiment-Analysis-on-Twitter-Airline-Data",
+			"description": "This project analyses the different tweets of customers to get their sentiments"
+		},
+		{
+			"id": 28,
+			"name": "streamlit-dashboard",
+			"url": "https://github.com/YvvonM/streamlit-dashboard",
+			"description": null
+		},
+		{
+			"id": 29,
+			"name": "tableu",
+			"url": "https://github.com/YvvonM/tableu",
+			"description": null
+		},
+		{
+			"id": 30,
+			"name": "telecommunication",
+			"url": "https://github.com/YvvonM/telecommunication",
+			"description": "data analytics on telecommunication data"
+		}
+	]
+}
