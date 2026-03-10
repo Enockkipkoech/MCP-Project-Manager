@@ -1,8 +1,12 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { json } from "node:stream/consumers";
 import { z } from "zod";
-import { id } from "zod/v4/locales";
+import * as fs from "fs";
+import * as path from "path";
+import { fileURLToPath } from "url";
+
+import { appendRepos } from "./utils/files.js";
+
 
 const server = new McpServer({
     name: "project-manager",
@@ -11,6 +15,8 @@ const server = new McpServer({
 })
 
 // TOOLS 
+
+// CREATE PROJECT
 server.registerTool(
     "create-project",
     {
@@ -59,7 +65,7 @@ server.registerTool(
     }
 );
 
-// GET GITHUB REPOSOTORIES
+// GET GITHUB REPOSOTORIES IN JSON
 server.registerTool(
     "get-github-repositories-json",
     {
@@ -100,6 +106,30 @@ server.registerTool(
                 description: repo.description,
             }));
 
+            // SAVE REPOSITORIES TO FILE IN "C:\Users\Administrator\myprojects\project-manager\build\data\${username}-repos.json"
+            try {
+                const __filename = fileURLToPath(import.meta.url);
+                const __dirname = path.dirname(__filename);
+                const outputPath = path.join(
+                    __dirname,
+                    "../build/data",
+                    `project-repos.json`
+                );
+
+                // append to file if exists, otherwise create new file
+                await appendRepos(outputPath, repositories);
+
+                console.error(
+                    `PROJECT-MANAGER: Saved repositories to ${outputPath}`
+                );
+            } catch (error) {
+                console.error(
+                    "PROJECT-MANAGER: Failed to save repositories to file:",
+                    error
+                );
+
+            }
+
             const result = {
                 status: "success",
                 message: `Fetched ${repositories.length} repositories for user "${username}"`,
@@ -133,6 +163,7 @@ server.registerTool(
     }
 );
 
+// GET GITHUB REPOSOTORIES IN MARKDOWN
 server.registerTool(
     "get-github-repositories-markdown",
     {
@@ -200,7 +231,38 @@ Total: ${repositories.length} repositories
     }
 );
 
+// MCP RESOURCE 
+server.registerResource(
+    "project-resource",
+    "rules://all",
+    {
+        title: "Project Resource",
+        description: "Example project resource",
+        mimeType: "application/json",
+    },
+    async (uri, _extra: any) => {
+        const uriString = uri.toString();
+        console.error("PROJECT-MANAGER: Fetching resource for URI:", uriString);
 
+        // Extra is the username passed in the input of the tool, we can use it to customize the resource fetching logic.
+
+
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+        const dataPath = path.join(__dirname, "./data", `project-repos.json`);
+        const rules = await fs.promises.readFile(dataPath, "utf-8");
+
+        return {
+            contents: [
+                {
+                    uri: uriString,
+                    mimeType: "application/json",
+                    text: rules,
+                },
+            ],
+        };
+    }
+);
 
 // SERVER EXEXUTING
 async function main() {
