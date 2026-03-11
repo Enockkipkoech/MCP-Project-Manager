@@ -1,7 +1,7 @@
 ## MODEL CONTEXT PROTOCOL (MCP) FOR PROJECT MANAGER
 - Implemented a MCP server that fetches GitHub repositories for a given username and saves the data to a JSON file / Markdown format file.
 
-### GitHub Repositories **Enockkipkoech** (30CSAMPLE REPOS)
+### GitHub Repositories **Enockkipkoech** (30 SAMPLE REPOS)
 
 | # | Repository | Description | Link |
 |---|---|---|---|
