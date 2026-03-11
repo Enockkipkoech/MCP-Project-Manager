@@ -6,6 +6,7 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 
 import { appendRepos } from "./utils/files.js";
+import { PROJECT_ANALYSIS_PROMPT, SKILL_EXTRACTOR_PROMPT, EFFORT_ESTIMATOR_PROMPT, RED_FLAG_DETECTOR_PROMPT, QUICK_SCAN_PROMPT } from "./utils/prompts.js";
 
 
 const server = new McpServer({
@@ -129,6 +130,7 @@ server.registerTool(
                 );
 
             }
+
 
             const result = {
                 status: "success",
@@ -264,6 +266,133 @@ server.registerResource(
     }
 );
 
+// MCP PROMPTS
+server.registerPrompt(
+    "system-requirements-specification-srs",
+    {
+        title: "SRS Generation",
+        description: "Analyse & Generate a System Requirements Specification",
+        argsSchema: {
+            details: z.string().min(1).describe("The project or job description to analyze for SRS generation."),
+            stack: z.string().optional().describe("The technology stack to consider for the project (e.g., React, Node.js, AWS, etc.)."),
+            resume: z.string().optional().describe("A brief resume or summary of the developer's background."),
+            analysisDepth: z.enum(["quick", "standard", "deep"]).optional().default("standard").describe("Depth of analysis:e.g. quick, standard, or deep."),
+            focusArea: z.enum(["technical", "business", "risk", "effort", "fit", "all"]).optional().default("all").describe("E.g. technical, business, risk, effort, fit, or all."),
+            industry: z.string().optional().describe("Industry or business vertical (e.g., FinTech, HealthTech, E-commerce, Blockchain, web3)."),
+            projectType: z.enum(["greenfield", "legacy", "migration", "integration", "maintenance", "unknown"]).optional().default("unknown").describe("Nature of the project. E.g. greenfield (new project), legacy (existing codebase), migration (moving to new tech), integration (connecting systems), maintenance (ongoing support), or unknown."),
+        }
+    },
+    async ({ details, stack, resume, analysisDepth = "standard", focusArea = "all", industry, projectType }) => {
+
+        // Build enriched context block
+        const contextBlock = [
+            `PROJECT DETAILS:\n${details}`,
+            stack ? `TECH STACK CONTEXT:\n${stack}` : null,
+            resume ? `CANDIDATE RESUME / BACKGROUND:\n${resume}` : null,
+            industry ? `INDUSTRY VERTICAL: ${industry}` : null,
+            projectType !== "unknown" ? `PROJECT TYPE: ${projectType}` : null,
+        ].filter(Boolean).join("\n\n---\n\n");
+
+        // Select analysis prompts based on depth & focus
+        const analysisPrompts: string[] = [];
+
+        if (analysisDepth === "quick") {
+            analysisPrompts.push(QUICK_SCAN_PROMPT);
+        } else {
+            // Standard and deep always include full project analysis
+            if (focusArea === "all" || focusArea === "technical" || focusArea === "business" || focusArea === "fit") {
+                analysisPrompts.push(PROJECT_ANALYSIS_PROMPT);
+            }
+            if (focusArea === "all" || focusArea === "technical" || focusArea === "fit") {
+                analysisPrompts.push(SKILL_EXTRACTOR_PROMPT);
+            }
+            if (analysisDepth === "deep") {
+                if (focusArea === "all" || focusArea === "effort") {
+                    analysisPrompts.push(EFFORT_ESTIMATOR_PROMPT);
+                }
+                if (focusArea === "all" || focusArea === "risk") {
+                    analysisPrompts.push(RED_FLAG_DETECTOR_PROMPT);
+                }
+            }
+        }
+
+        // Build combined instruction
+        const combinedInstructions = analysisPrompts.join("\n\n========================================\n\n");
+
+        // Final SRS generation instruction appended after analysis
+        const srsInstruction = `
+========================================
+## FINAL OUTPUT: SYSTEM REQUIREMENTS SPECIFICATION (SRS)
+
+Using all of the analysis above as your foundation, generate a structured SRS document with these sections:
+
+1. **Introduction**
+   - Project overview, purpose, scope, and definitions
+
+2. **Overall Description**
+   - Product perspective, key features, user classes, constraints
+
+3. **Specific Requirements**
+   - Functional requirements (organized by module/feature)
+   - Non-functional requirements (performance, security, scalability, compliance)
+   - External interface requirements (APIs, integrations, 3rd-party services)
+
+4. **Tools & Technologies**
+   - Recommended stack with justification
+   - Infrastructure and deployment considerations
+
+5. **Timeline & Budget**
+   - Phase-by-phase breakdown with milestones
+   - Effort estimates and resource requirements
+   - Budget range recommendation
+
+6. **Risk Register**
+   - Top risks with likelihood, impact, and mitigation strategies
+
+7. **Open Questions & Assumptions**
+   - Unresolved ambiguities that need stakeholder input
+
+Format using clear headings, bullet points, and tables where appropriate.
+`;
+
+        return {
+            messages: [
+                {
+                    role: "user",
+                    content: {
+                        type: "text",
+                        text: `${combinedInstructions}\n\n${srsInstruction}\n\n========================================\nINPUT CONTEXT:\n\n${contextBlock}`,
+                    }
+                }
+            ]
+        };
+    }
+);
+
+// FOLLOW-UP PROMPT FOR SRS REFINEMENT BASED ON STAKEHOLDER FEEDBACK
+server.registerPrompt(
+    "followup-srs",
+    {
+        title: "SRS-REFINEMENT",
+        description: "Follow-up query on System Requirements Specification above",
+        argsSchema: {
+            feedback: z.string().min(1).describe("Stakeholder feedback, questions, or requests for clarification regarding the previously generated SRS."),
+        }
+    },
+    async ({ feedback }) => {
+        return {
+            messages: [
+                {
+                    role: "user",
+                    content: {
+                        type: "text",
+                        text: `STAKEHOLDER FEEDBACK / QUESTION: Based on the feedback provided: ${feedback} Generate an application cover lettter. Please analyze the feedback in the context of the previously generated SRS and provide a refined version of the SRS that addresses the feedback. Highlight any changes made and explain how they address the stakeholder's concerns. If there are ambiguities in the feedback, identify them and suggest possible interpretations or follow-up questions to clarify the stakeholder's intent. Make it brief between 150 - 200 words. Use simple English in bullet/point format.`,
+                    }
+                }
+            ]
+        };
+    }
+);
 // SERVER EXEXUTING
 async function main() {
     const transport = new StdioServerTransport();
